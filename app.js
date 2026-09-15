@@ -1,0 +1,15 @@
+let selected=null;
+const $=id=>document.getElementById(id);
+const fmt=n=>new Intl.NumberFormat('tr-TR',{style:'currency',currency:'TRY'}).format(Number(n)||0);
+const iso=()=>{const d=new Date(),z=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`};
+const tr=s=>new Date(s+'T12:00:00').toLocaleDateString('tr-TR');
+const dayCount=(p,d)=>{if(!p||!d)return 0; const a=new Date(p+'T00:00:00'),b=new Date(d+'T00:00:00'); return Math.max(0,Math.round((b-a)/86400000));};
+$('pickup').value=iso(); $('delivery').value=iso();
+function updateDays(){let n=dayCount($('pickup').value,$('delivery').value); $('daysPreview').value=n; if(n<0)$('daysPreview').value=0;}
+$('pickup').addEventListener('change',()=>{if($('delivery').value<$('pickup').value)$('delivery').value=$('pickup').value; $('delivery').min=$('pickup').value; updateDays();});
+$('delivery').addEventListener('change',updateDays); $('delivery').min=$('pickup').value; updateDays();
+function render(q=''){q=q.toLocaleLowerCase('tr');let a=CARS.filter(c=>(c.name+' '+c.category).toLocaleLowerCase('tr').includes(q));$('cars').innerHTML=a.map(c=>`<div class="car" data-i="${c.order}"><img loading="lazy" src="${c.image}" alt="${c.name}"><div><b>${c.name}</b><small>${c.category} • Sıra ${c.order}</small></div><span class="price">${c.price?fmt(c.price):'Fiyat sorunuz'}</span></div>`).join('');document.querySelectorAll('.car').forEach(e=>e.onclick=()=>choose(+e.dataset.i))}
+function choose(i){selected=CARS[i];$('selected').className='chosen';$('selected').innerHTML=`<b>${selected.name}</b><span>${selected.category} • Sıra ${selected.order}</span>`;$('amount').value=selected.price??'';$('cars').innerHTML='';$('search').value=selected.name}
+render(); $('search').oninput=e=>render(e.target.value); $('search').onfocus=e=>render(e.target.value); $('tc').oninput=e=>e.target.value=e.target.value.replace(/\D/g,'').slice(0,11);
+$('make').onclick=()=>{let name=$('name').value.trim(),tc=$('tc').value.trim(),amount=Number($('amount').value.replace(',','.')),dep=Number($('deposit').value.replace(',','.'))||0,p=$('pickup').value,d=$('delivery').value,days=dayCount(p,d);if(!name||tc.length!==11||!selected||!amount||!p||!d){alert('Ad Soyad, 11 haneli TC, araç, tarihler ve tutarı doldur.');return}if(new Date(d)<new Date(p)){alert('Teslim tarihi alış tarihinden önce olamaz.');return}$('oname').textContent=name;$('otc').textContent=tc;$('ocar').textContent=selected.name;$('ocat').textContent=selected.category;$('oord').textContent=selected.order;$('opickup').textContent=tr(p);$('odelivery').textContent=tr(d);$('odays').textContent=days+' gün';$('otype').textContent=$('deliveryType').value;$('odeposit').textContent=fmt(dep);$('odate').textContent='Tarih: '+tr(iso());$('no').textContent='Fatura No: GRT-'+Date.now().toString().slice(-7);$('oline').textContent=fmt(amount);$('depLine').textContent=fmt(dep);$('ototal').textContent=fmt(amount+dep);$('result').classList.remove('hide');$('result').scrollIntoView({behavior:'smooth',block:'start'})};
+$('again').onclick=()=>location.reload();
