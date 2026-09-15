@@ -1,8 +1,13 @@
-Garenta Fatura Paneli
+GARENTA FATURA PANELI V5
+- Mobil uyumlu giriş paneli
+- 59 araç ve eşleşmiş araç görselleri
+- Alış / iade tarihleri arasında gün sayısı otomatik
+- Aynı gün kiralama = 1 gün
+- Günlük ücret x gün = kiralama bedeli
+- Depozito ayrıca eklenir
+- KDV %0 sabit
+- Alış/teslim ve iade biçimleri ayrı seçilebilir
+- Fatura görünümü gönderilen Garenta PDF örneğine yakın A4 düzenindedir
+- Yazdır / PDF ile tarayıcıdan PDF kaydedilebilir
 
-1) index.html dosyasını açın.
-2) Mobil/masaüstü tarayıcıda çalışır.
-3) Araç listesi ve görselleri assets/cars içindedir.
-4) Tarih her açılışta cihazın mevcut gününe gelir.
-5) KDV %0 sabittir.
-6) Yazdır / PDF ile tarayıcının PDF kaydetme özelliğini kullanabilirsiniz.
+Kullanım: index.html dosyasını açın.
